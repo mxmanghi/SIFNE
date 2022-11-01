@@ -183,8 +183,8 @@ close(h);
 msgbox('Manual Correction Done !');
 AnalysisInfo = NewAnalysisInfo;
 all_sorted_filament = M_asf;
-save data\AnalysisInfo.mat AnalysisInfo;
-save data\all_sorted_filament.mat all_sorted_filament;
+save(fullfile('data','AnalysisInfo.mat'),'AnalysisInfo');
+save(fullfile('data','all_sorted_filament.mat'),'all_sorted_filament');
 
 
 
@@ -442,9 +442,9 @@ global Minitial_all_tips;
 global counter;
 counter = 1;
 close(figure(1));
-load data\R.mat;
-load data\OriginImg.mat;
-load data\all_sorted_filament.mat;
+load(fullfile('data','R.mat'));
+load(fullfile('data','OriginImg.mat'));
+load(fullfile('data','all_sorted_filament.mat'));
 M_OriginMargin = zeros(size(OriginImg,1)+R+R, size(OriginImg,2)+R+R);
 M_OriginMargin((R+1):(size(OriginImg,1)+R),(R+1):(size(OriginImg,2)+R)) = mat2gray(OriginImg);
 M_asf = all_sorted_filament;
@@ -493,7 +493,7 @@ function tempcomBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to tempcomBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-mkdir ManCorrTempInfo;
+mkdir(fullfile('ManCorrTempInfo'));
 global M_asf;
 global M_OriginMargin;
 global M_all_pts;
@@ -501,12 +501,12 @@ global M_all_tips;
 global Minitial_all_tips;
 global counter;
 
-save ManCorrTempInfo\M_asf.mat M_asf;
-save ManCorrTempInfo\M_OriginMargin.mat M_OriginMargin;
-save ManCorrTempInfo\M_all_pts.mat M_all_pts;
-save ManCorrTempInfo\M_all_tips.mat M_all_tips;
-save ManCorrTempInfo\Minitial_all_tips.mat Minitial_all_tips;
-save ManCorrTempInfo\counter.mat counter;
+save(fullfile('ManCorrTempInfo','M_asf.mat'),'M_asf');
+save(fullfile('ManCorrTempInfo','M_OriginMargin.mat'),'M_OriginMargin');
+save(fullfile('ManCorrTempInfo','M_all_pts.mat'),'M_all_pts');
+save(fullfile('ManCorrTempInfo','M_all_tips.mat'),'M_all_tips');
+save(fullfile('ManCorrTempInfo','Minitial_all_tips.mat'),'Minitial_all_tips');
+save(fullfile('ManCorrTempInfo','counter.mat'),'counter');
 msgbox('Information Saved ! Take Rest and Continue !');
 
 
@@ -526,16 +526,16 @@ global M_all_pts;
 global M_all_tips;
 global Minitial_all_tips;
 global counter;
-load ManCorrTempInfo\M_asf.mat;
-load ManCorrTempInfo\M_OriginMargin.mat;
-load ManCorrTempInfo\M_all_pts.mat;
-load ManCorrTempInfo\M_all_tips.mat;
-load ManCorrTempInfo\Minitial_all_tips.mat;
-load ManCorrTempInfo\counter.mat;
+load(fullfile('ManCorrTempInfo','M_asf.mat'));
+load(fullfile('ManCorrTempInfo','M_OriginMargin.mat'));
+load(fullfile('ManCorrTempInfo','M_all_pts.mat'));
+load(fullfile('ManCorrTempInfo','M_all_tips.mat'));
+load(fullfile('ManCorrTempInfo','Minitial_all_tips.mat'));
+load(fullfile('ManCorrTempInfo','counter.mat'));
 
 close(figure(1));
-load data\R.mat;
-load data\OriginImg.mat;
+load(fullfile('data','R.mat'));
+load(fullfile('data','OriginImg.mat'));
 M_OriginMargin = zeros(size(OriginImg,1)+R+R, size(OriginImg,2)+R+R);
 M_OriginMargin((R+1):(size(OriginImg,1)+R),(R+1):(size(OriginImg,2)+R)) = mat2gray(OriginImg);
 h = waitbar(0,'preparing ...');

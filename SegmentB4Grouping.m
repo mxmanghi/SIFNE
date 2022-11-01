@@ -90,8 +90,8 @@ SizofJuncEdit = str2num(get(handles.SizofJuncEdit,'String'));
 MinNofPixels = str2num(get(handles.MinNofPixels,'String'));
 
 
-% save user settings
-fileID = fopen('UserSettings\SegmentationSettings.txt','w');
+% save','user settings
+fileID = fopen(fullfile('UserSettings','SegmentationSettings.txt'),'w');
 fprintf(fileID,['Segmentation Option1 Threshold value:      ',num2str(ThreshOpt1Edit),'\r\n']);
 fprintf(fileID,['Size of Junctions to Remove (pixels):      ',num2str(SizofJuncEdit),'\r\n']);
 fprintf(fileID,['Short Fragments to Remove (pixels):        ',num2str(MinNofPixels),'\r\n']);
@@ -140,10 +140,10 @@ function RegTipsBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to RegTipsBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-load data\AllFragments.mat;
-load data\Allpts.mat;
-load data\L.mat;
-load data\R.mat;
+load(fullfile('data','AllFragments.mat'));
+load(fullfile('data','Allpts.mat'));
+load(fullfile('data','L.mat'));
+load(fullfile('data','R.mat'));
 LL = L;
 SkeTermi = bwmorph(AllFragments,'endpoints');
 [x y] = find(SkeTermi==1);
@@ -153,7 +153,7 @@ all_tips(:,3) = L(sub2ind(size(L),all_tips(:,1),all_tips(:,2)));
 
 % may register tip orientation using parallel computing below
 RegR = 2*R; % to register the direction, we need to consider only a local region around a tip
-save data\RegR.mat RegR;
+save(fullfile('data','RegR.mat'),'RegR');
 tempInfo = zeros(size(all_tips,1),3);
 
 MultiCore = get(handles.MultiCoreList,'Value');
@@ -188,7 +188,7 @@ for i = 1:100
     idx = ceil(rand * size(all_tips,1));
     text(all_tips(idx,2),all_tips(idx,1),[num2str(all_tips(idx,4))],'color','g');
 end
-save data\all_tips.mat all_tips;
+save(fullfile('data','all_tips.mat'),'all_tips');
 
 
 % --- Executes on button press in RemoveShortBtn.
@@ -198,19 +198,19 @@ function RemoveShortBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % remove very short fragment
 
-load data\AllFragments.mat;
-load data\R.mat
-load data\OriginImg.mat
-load data\Allpts.mat;
-load data\L.mat;
+load(fullfile('data','AllFragments.mat'));
+load(fullfile('data','R.mat'))
+load(fullfile('data','OriginImg.mat'))
+load(fullfile('data','Allpts.mat'));
+load(fullfile('data','L.mat'));
 MIN_FragmentLength = str2num(get(handles.MinNofPixels,'String'));
 AllFragments = bwareaopen(AllFragments, MIN_FragmentLength);
 [L num] = bwlabel(AllFragments,8);
 [x y] = find(AllFragments==1);
 Allpts = [x y];
-save data\AllFragments.mat AllFragments;
-save data\Allpts.mat Allpts;
-save data\L.mat L num;
+save(fullfile('data','AllFragments.mat'),'AllFragments');
+save(fullfile('data','Allpts.mat'),'Allpts');
+save(fullfile('data','L.mat'),'L','num');
 close(figure(1));
 figure('name','Filtered Skeleton (Short Filaments Removed)');
 imshow(mat2gray(OriginImg));hold on;
@@ -226,9 +226,9 @@ function RemoveCrossBtn_Callback(hObject, eventdata, handles)
 
 % remove margin information below
 
-load data\RawSke.mat;
-load data\OriginImg.mat;
-load data\R.mat;
+load(fullfile('data','RawSke.mat'));
+load(fullfile('data','OriginImg.mat'));
+load(fullfile('data','R.mat'));
 AllFragments = RawSke;
 NOptsMargin = R;
 DeleteList = [];
@@ -292,11 +292,11 @@ Allpts = [x y];
 [L num] = bwlabel(AllFragments,8);
 
 RawCrPts = CrPts;
-save data\L.mat L num;
-save data\AllFragments.mat AllFragments;
-save data\Allpts.mat Allpts;
-save data\Size_Junc.mat Size_Junc;
-save data\RawCrPts.mat RawCrPts;
+save(fullfile('data','L.mat'),'L','num');
+save(fullfile('data','AllFragments.mat'),'AllFragments');
+save(fullfile('data','Allpts.mat'),'Allpts');
+save(fullfile('data','Size_Junc.mat'),'Size_Junc');
+save(fullfile('data','RawCrPts.mat'),'RawCrPts');
 close(figure(1));
 figure('name','Individual Filamentous Fragments');
 imshow(mat2gray(OriginImg));hold on;plot(y-R,x-R,'r.');axis off;
@@ -341,9 +341,9 @@ function AutoThresh_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 warning off;
-load data\OFT_Img;
-load data\OriginImg;
-load data\R;
+load(fullfile('data','OFT_Img'));
+load(fullfile('data','OriginImg'));
+load(fullfile('data','R'));
 
 DefaultFactor = 1.42;
 I = mat2gray(OFT_Img);
@@ -367,9 +367,9 @@ scrsz = get(0,'ScreenSize');
 set(figure(1),'Position',[scrsz(1) scrsz(2) scrsz(3) scrsz(4)])
 Allpts = [x y];
 AllFragments = RawSke;
-save data\Allpts.mat Allpts;
-save data\RawSke.mat RawSke;
-save data\AllFragments.mat AllFragments;
+save(fullfile('data','Allpts.mat'),'Allpts');
+save(fullfile('data','RawSke.mat'),'RawSke');
+save(fullfile('data','AllFragments.mat'),'AllFragments');
 
 
 function ThreshOpt1Edit_Callback(hObject, eventdata, handles)
@@ -400,9 +400,9 @@ function ThreshOpt1Btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 t = str2num(get(handles.ThreshOpt1Edit,'String'));
-load data\OFT_Img;
-load data\OriginImg;
-load data\R;
+load(fullfile('data','OFT_Img'));
+load(fullfile('data','OriginImg'));
+load(fullfile('data','R'));
 
 I = mat2gray(OFT_Img);
 BW = im2bw(I,t);
@@ -420,9 +420,9 @@ set(figure(1),'Position',[scrsz(1) scrsz(2) scrsz(3) scrsz(4)])
 Allpts = [x y];
 Allpts = [x y];
 AllFragments = RawSke;
-save data\Allpts.mat Allpts;
-save data\RawSke.mat RawSke;
-save data\AllFragments.mat AllFragments;
+save(fullfile('data','Allpts.mat'),'Allpts');
+save(fullfile('data','RawSke.mat'),'RawSke');
+save(fullfile('data','AllFragments.mat'),'AllFragments');
 
 
 % --- Executes on selection change in MultiCoreList.
@@ -476,12 +476,12 @@ function IterationBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to IterationBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-load data\OriginImg.mat;
-load data\AllFragments.mat;
-load data\OFT_Img.mat;
-load data\R.mat;
-load data\ROI_Mask.mat;
-load data\NofOrientations_FT.mat;
+load(fullfile('data','OriginImg.mat'));
+load(fullfile('data','AllFragments.mat'));
+load(fullfile('data','OFT_Img.mat'));
+load(fullfile('data','R.mat'));
+load(fullfile('data','ROI_Mask.mat'));
+load(fullfile('data','NofOrientations_FT.mat'));
 
 Thresh = str2num(get(handles.ThreshOpt1Edit,'String'));
 JuncSize = str2num(get(handles.SizofJuncEdit,'String'));
@@ -508,6 +508,6 @@ imshow(mat2gray(OriginImg));hold on;
 plot(y-R,x-R,'r.');axis off;
 msgbox('Iterative Extraction of Fragments Done !');
 
-save data\AllFragments.mat AllFragments;
-save data\Allpts.mat Allpts;
-save data\L.mat L num;
+save(fullfile('data','AllFragments.mat'),'AllFragments');
+save(fullfile('data','Allpts.mat'),'Allpts');
+save(fullfile('data','L.mat'),'L','num');

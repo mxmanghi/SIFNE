@@ -29,22 +29,23 @@ function varargout = LoadImg(varargin)
 
 % Last Modified by GUIDE v2.5 17-Mar-2015 11:00:31
 
-% Begin initialization code - DO NOT EDIT
-gui_Singleton = 1;
-gui_State = struct('gui_Name',       mfilename, ...
-    'gui_Singleton',  gui_Singleton, ...
-    'gui_OpeningFcn', @LoadImg_OpeningFcn, ...
-    'gui_OutputFcn',  @LoadImg_OutputFcn, ...
-    'gui_LayoutFcn',  [] , ...
-    'gui_Callback',   []);
-if nargin && ischar(varargin{1})
-    gui_State.gui_Callback = str2func(varargin{1});
-end
+    % Begin initialization code - DO NOT EDIT
+    gui_Singleton = 1;
+    gui_State = struct('gui_Name',       mfilename, ...
+                       'gui_Singleton',  gui_Singleton, ...
+                       'gui_OpeningFcn', @LoadImg_OpeningFcn, ...
+                       'gui_OutputFcn',  @LoadImg_OutputFcn, ...
+                       'gui_LayoutFcn',  [] , ...
+                       'gui_Callback',   []);
+    if nargin && ischar(varargin{1})
+        gui_State.gui_Callback = str2func(varargin{1});
+    end
 
-if nargout
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
-else
-    gui_mainfcn(gui_State, varargin{:});
+    if nargout
+        [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+    else
+        gui_mainfcn(gui_State, varargin{:});
+    end
 end
 % End initialization code - DO NOT EDIT
 
@@ -57,15 +58,15 @@ function LoadImg_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to LoadImg (see VARARGIN)
 
-% Choose default command line output for LoadImg
-handles.output = hObject;
+    % Choose default command line output for LoadImg
+    handles.output = hObject;
 
-% Update handles structure
-guidata(hObject, handles);
+    % Update handles structure
+    guidata(hObject, handles);
 
-% UIWAIT makes LoadImg wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
-
+    % UIWAIT makes LoadImg wait for user response (see UIRESUME)
+    % uiwait(handles.figure1);
+end
 
 % --- Outputs from this function are returned to the command line.
 function varargout = LoadImg_OutputFcn(hObject, eventdata, handles)
@@ -74,27 +75,28 @@ function varargout = LoadImg_OutputFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Get default command line output from handles structure
-varargout{1} = handles.output;
-
+    % Get default command line output from handles structure
+    varargout{1} = handles.output;
+end
 
 % --- Executes on button press in load_button.
 function load_button_Callback(hObject, eventdata, handles)
 % hObject    handle to load_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-warning off;
-close(figure(1));
-imgpath=imgetfile;
-mkdir data;
-save data\imgpath.mat imgpath;
-OriginImg = imread(imgpath);
-if length(size(OriginImg))==3
-    OriginImg = rgb2gray(OriginImg);
+    warning off;
+    close(figure(1));
+    imgpath=imgetfile;
+    mkdir(fullfile('data'));
+    save(fullfile('data','imgpath.mat'),'imgpath');
+    OriginImg = imread(imgpath);
+    if length(size(OriginImg))==3
+        OriginImg = rgb2gray(OriginImg);
+    end
+    OriginImg = imadjust(im2uint8(OriginImg));
+    save(fullfile('data','OriginImg.mat'),'OriginImg');
+    close all;
+    figure('name','Please Check The Image Loaded');
+    imshow(OriginImg);axis off;
+    LFT_OFT;
 end
-OriginImg = imadjust(im2uint8(OriginImg));
-save data\OriginImg.mat OriginImg;
-close all;
-figure('name','Please Check The Image Loaded');
-imshow(OriginImg);axis off;
-LFT_OFT;
