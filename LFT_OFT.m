@@ -113,8 +113,8 @@ function Preview_FT_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    handles
-    eventdata
+    %handles
+    %eventdata
     warning off;
     close(figure(1));
 
@@ -125,7 +125,7 @@ function Preview_FT_Callback(hObject, eventdata, handles)
 
     % loading the image data stashed away
 
-    load(fullfile('data','OriginImg.mat'));
+    load(fullfile(tempdir,'data','OriginImg.mat'));
     I = OriginImg;
     [H W] = size(I);
 
@@ -148,9 +148,9 @@ function Preview_FT_Callback(hObject, eventdata, handles)
     mask = uint8(zeros(H+R+R,W+R+R));
     mask(R+1:H+R,R+1:W+R) = I;
     ROI_Mask = ones(size(mask));
-    save(fullfile('data','ROI_Mask.mat'),'ROI_Mask');
-    save(fullfile('data','R.mat'),'R');
-    save(fullfile('data','NofOrientations_FT.mat'),'NofOrientations_FT');
+    save(fullfile(tempdir,'data','ROI_Mask.mat'),'ROI_Mask');
+    save(fullfile(tempdir,'data','R.mat'),'R');
+    save(fullfile(tempdir,'data','NofOrientations_FT.mat'),'NofOrientations_FT');
     [H W] = size(mask);
     AngleList = 0:pi/NofOrientations_FT:pi-pi/NofOrientations_FT;
     PtsSide1 = [(R*cos(AngleList)+W/2-6)'      (R*sin(AngleList)+H/2-6)'];
@@ -163,6 +163,16 @@ function Preview_FT_Callback(hObject, eventdata, handles)
     % 'They are called handles, because you are supposed to hold on to them'
 
     ImgH=imshow(mask);
+
+    % For some reasons on Linux and Mac the subsequent plot calls are not directed to the figure
+    % where the mask was displayed. Likely the mouse interaction with the LFT window's 'Preview'
+    % button switches the graphic context.
+
+    % Determining the graphic context from the ImgH Image handle, assuming ImgH is an Image
+    % type handle which is a direct child of an Axes type object, which in turn is a direct
+    % child of the Figure object
+
+    figure(get(get(ImgH,'Parent'),'Parent'));
     hold on;axis off;
 
     % Plotting the orientations dial
@@ -202,10 +212,10 @@ function RunFTmexFunctionButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     close(figure(1));
-    load(fullfile('data','R.mat'),'R');
-    load(fullfile('data','NofOrientations_FT.mat'),'NofOrientations_FT');
-    load(fullfile('data','OriginImg.mat'));
-    load(fullfile('data','ROI_Mask'));
+    load(fullfile(tempdir,'data','R.mat'),'R');
+    load(fullfile(tempdir,'data','NofOrientations_FT.mat'),'NofOrientations_FT');
+    load(fullfile(tempdir,'data','OriginImg.mat'));
+    load(fullfile(tempdir,'data','ROI_Mask'));
     [H W] = size(OriginImg);
 
     %
@@ -229,9 +239,9 @@ function RunFTmexFunctionButton_Callback(hObject, eventdata, handles)
 
     [OFT_Img, LFT_Img, LFT_Orientations] = LFT_OFT_mex(double(OriginImg_Margin),double(R),double(NofOrientations_FT),double(ROI_Mask));
     msgbox('Transformation Done !');
-    save(fullfile('data','OFT_Img.mat'),'OFT_Img');
-    save(fullfile('data','LFT_Img.mat'),'LFT_Img');
-    save(fullfile('data','LFT_Orientations.mat'),'LFT_Orientations');
+    save(fullfile(tempdir,'data','OFT_Img.mat'),'OFT_Img');
+    save(fullfile(tempdir,'data','LFT_Img.mat'),'LFT_Img');
+    save(fullfile(tempdir,'data','LFT_Orientations.mat'),'LFT_Orientations');
     figure('name','Check the Enhanced Image');
     imshow(mat2gray(OFT_Img));axis off;
 end
@@ -245,9 +255,9 @@ function NextStepDoSegmentButton_Callback(hObject, eventdata, handles)
     R_input = str2num(get(handles.R_input,'String'));
     NumberofAnglesInput = str2num(get(handles.NumberofAnglesInput,'String'));
 
-    mkdir(fullfile('UserSettings'));
+    mkdir(fullfile(gethome,'UserSettings'));
     % save','user settings
-    fileID = fopen(fullfile('UserSettings','FilterTransformSettings.txt'),'w');
+    fileID = fopen(fullfile(gethome,'UserSettings','FilterTransformSettings.txt'),'w');
     fprintf(fileID,['Radius for Transform (pixels):  ',num2str(R_input),'\r\n']);
     fprintf(fileID,['Number of Rotations:            ',num2str(NumberofAnglesInput),'\r\n']);
 
@@ -271,21 +281,23 @@ function ROIpolyBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    % DEBUG +
-    handles
-    % DEBUG -
     R = str2num(get(handles.R_input,'String'));
     NofOrientations_FT = str2num(get(handles.NumberofAnglesInput,'String'));
-    save(fullfile('data','R.mat'),'R');
-    save(fullfile('data','NofOrientations_FT.mat'),'NofOrientations_FT');
-    load(fullfile('data','OriginImg'));
+    save(fullfile(tempdir,'data','R.mat'),'R');
+    save(fullfile(tempdir,'data','NofOrientations_FT.mat'),'NofOrientations_FT');
+    load(fullfile(tempdir,'data','OriginImg'));
     close(figure(1));
     I = zeros(size(OriginImg,1)+2*R, size(OriginImg,2)+2*R);
     I(R+1:size(I,1)-R,R+1:size(I,2)-R) = OriginImg;
     current_figure=figure('name','Please Select the Region of Interest');
-    imshow(mat2gray(I));
+
+    % See the Preview callback function for explanation
+
+    ImgH=imshow(mat2gray(I));
+    figure(get(get(ImgH,'Parent'),'Parent'));
+    
     ROI_Mask = roipoly;
-    save(fullfile('data','ROI_Mask.mat'),'ROI_Mask');
+    save(fullfile(tempdir,'data','ROI_Mask.mat'),'ROI_Mask');
     msgbox('ROI Selected !');
     close(figure(1));
 

@@ -18,7 +18,7 @@ while ~isempty(temp)
     changing = temp(k,:);
     temp(k,:) = [];
 end
-load(fullfile('data','L'));
+load(fullfile(tempdir,'data','L'));
 maskI = zeros(size(L));
 maskI(sub2ind(size(L),filament(:,1),filament(:,2))) = 1;
 orient = regionprops(maskI,'Orientation');

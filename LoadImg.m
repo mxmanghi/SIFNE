@@ -87,14 +87,14 @@ function load_button_Callback(hObject, eventdata, handles)
     warning off;
     close(figure(1));
     imgpath=imgetfile;
-    mkdir(fullfile('data'));
-    save(fullfile('data','imgpath.mat'),'imgpath');
+    mkdir(fullfile(tempdir,'data'));
+    save(fullfile(tempdir,'data','imgpath.mat'),'imgpath');
     OriginImg = imread(imgpath);
     if length(size(OriginImg))==3
         OriginImg = rgb2gray(OriginImg);
     end
     OriginImg = imadjust(im2uint8(OriginImg));
-    save(fullfile('data','OriginImg.mat'),'OriginImg');
+    save(fullfile(tempdir,'data','OriginImg.mat'),'OriginImg');
     close all;
     figure('name','Please Check The Image Loaded');
     imshow(OriginImg);axis off;

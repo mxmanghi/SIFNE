@@ -86,8 +86,8 @@ function PreviewBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 warning off;
 close(figure(1));
-load(fullfile('data','AllFragments'));
-load(fullfile('data','all_tips'));
+load(fullfile(tempdir,'data','AllFragments'));
+load(fullfile(tempdir,'data','all_tips'));
 figure('name','Image of All Filamentous Fragments');
 imshow(mat2gray(AllFragments));axis off;title('Please double-click the tip where you want to check the region for searching');
 [Y1 X1]= ginput(1);
@@ -196,9 +196,9 @@ function QuickSearch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 close(figure(1));
-load(fullfile('data','all_tips.mat'));
-load(fullfile('data','AllFragments'));
-load(fullfile('data','L.mat'));
+load(fullfile(tempdir,'data','all_tips.mat'));
+load(fullfile(tempdir,'data','AllFragments'));
+load(fullfile(tempdir,'data','L.mat'));
 
 FanR = str2num(get(handles.FanR,'String'));
 FanAngle = str2num(get(handles.EditFanAngle,'String'));
@@ -272,7 +272,7 @@ for i = 1:size(new_partner_list,2)
         break;
     end
 end
-save(fullfile('data','new_partner_list.mat'),'new_partner_list');
+save(fullfile(tempdir,'data','new_partner_list.mat'),'new_partner_list');
 
 all_tips(:,7) = 1:size(all_tips,1); % add global index to all tips
 all_tips(:,8) = ones(size(all_tips,1),1); % this reserves to indicates number of lives
@@ -296,7 +296,7 @@ close(h);
 [L num] = bwlabel(AllFragments,8);
 L_GlobalIndex = zeros(size(L));
 L_GlobalIndex(sub2ind(size(L),all_tips(:,1),all_tips(:,2))) = 1:length(all_tips(:,1));
-save(fullfile('data','L_GlobalIndex.mat'),'L_GlobalIndex');
+save(fullfile(tempdir,'data','L_GlobalIndex.mat'),'L_GlobalIndex');
 msgbox('Tip Search Done ! Please Proceed to GROUPING !');
 
 % assign number of lives to each fragments according to the max number of lives of its two tips
@@ -315,7 +315,7 @@ if Overlap == 1
     all_tips(:,8) = ones(size(all_tips,1),1); % if overlap is not allowed, the number of lives should be '1'
 end
 
-save(fullfile('data','all_tips.mat'),'all_tips');
+save(fullfile(tempdir,'data','all_tips.mat'),'all_tips');
 
 % ****** structure of all_tips so far ******   #: Number
 %           colume1            colume2           colume3         colume4         colume5            colume6        colume7          colume8          colume9               colume10                colume11          ...
@@ -334,9 +334,9 @@ function SortingBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 close(figure(1));
-load(fullfile('data','all_filament.mat'));
-load(fullfile('data','all_connects.mat'));
-load(fullfile('data','L'));
+load(fullfile(tempdir,'data','all_filament.mat'));
+load(fullfile(tempdir,'data','all_connects.mat'));
+load(fullfile(tempdir,'data','L'));
 
 maskI = zeros(size(L));
 Fullength = 5*size(all_filament,1);
@@ -372,8 +372,8 @@ for i = 1:size(all_sorted_filament,1)
 end
 msgbox('Analysis and Sorting Done !');
 
-save(fullfile('data','all_sorted_filament.mat'),'all_sorted_filament');
-save(fullfile('data','AnalysisInfo.mat'),'AnalysisInfo');
+save(fullfile(tempdir,'data','all_sorted_filament.mat'),'all_sorted_filament');
+save(fullfile(tempdir,'data','AnalysisInfo.mat'),'AnalysisInfo');
 
 
 function EditPixelSize_Callback(hObject, eventdata, handles)
@@ -436,10 +436,10 @@ function RemoveShortBtn_Callback(hObject, eventdata, handles)
 close(figure(1));
 close(figure(2));
 
-load(fullfile('data','AnalysisInfo'));
-load(fullfile('data','all_sorted_filament'));
-load(fullfile('data','AllFragments.mat'));
-load(fullfile('data','all_connects.mat'));
+load(fullfile(tempdir,'data','AnalysisInfo'));
+load(fullfile(tempdir,'data','all_sorted_filament'));
+load(fullfile(tempdir,'data','AllFragments.mat'));
+load(fullfile(tempdir,'data','all_connects.mat'));
 
 ShortFilament= str2num(get(handles.ShortFilamentEdit,'String'));
 
@@ -478,9 +478,9 @@ if RemoveUngrp==1
 end
 % remove ungrouped above
 all_connects_shortlist = all_connects;
-save(fullfile('data','AnalysisInfo.mat'),'AnalysisInfo');
-save(fullfile('data','all_sorted_filament.mat'),'all_sorted_filament');
-save(fullfile('data','all_connects_shortlist.mat'),'all_connects_shortlist');
+save(fullfile(tempdir,'data','AnalysisInfo.mat'),'AnalysisInfo');
+save(fullfile(tempdir,'data','all_sorted_filament.mat'),'all_sorted_filament');
+save(fullfile(tempdir,'data','all_connects_shortlist.mat'),'all_connects_shortlist');
 
 % --- Executes on button press in QuickGrp.
 function QuickGrp_Callback(hObject, eventdata, handles)
@@ -490,8 +490,8 @@ function QuickGrp_Callback(hObject, eventdata, handles)
 
 % filamentous fragment grouping starts
 close(figure(1));
-load(fullfile('data','L.mat'));
-load(fullfile('data','all_tips.mat'));
+load(fullfile(tempdir,'data','L.mat'));
+load(fullfile(tempdir,'data','all_tips.mat'));
 
 NofLives = all_tips(:,8);
 NofLives(find(NofLives==0)) = 1;
@@ -614,10 +614,10 @@ msgbox('Grouping Done !');
 close(h);
 close(figure(1));
 % filamentous fragment grouping ends
-save(fullfile('data','all_filament.mat'),'all_filament');
-save(fullfile('data','all_connects.mat'),'all_connects');
+save(fullfile(tempdir,'data','all_filament.mat'),'all_filament');
+save(fullfile(tempdir,'data','all_connects.mat'),'all_connects');
 all_connects_shortlist = all_connects;
-save(fullfile('data','all_connects_shortlist.mat'),'all_connects_shortlist');
+save(fullfile(tempdir,'data','all_connects_shortlist.mat'),'all_connects_shortlist');
 
 
 % --- Executes on selection change in AnalysisList.
@@ -654,12 +654,12 @@ switch A
     case 1
         warning off;
         close(figure(1));close(figure(2));
-        load(fullfile('data','R.mat'));
-        load(fullfile('data','AllFragments.mat'));
-        load(fullfile('data','L.mat'));
-        load(fullfile('data','all_sorted_filament.mat'),'all_sorted_filament');
-        load(fullfile('data','AnalysisInfo.mat'));
-        load(fullfile('data','ROI_Mask'));
+        load(fullfile(tempdir,'data','R.mat'));
+        load(fullfile(tempdir,'data','AllFragments.mat'));
+        load(fullfile(tempdir,'data','L.mat'));
+        load(fullfile(tempdir,'data','all_sorted_filament.mat'),'all_sorted_filament');
+        load(fullfile(tempdir,'data','AnalysisInfo.mat'));
+        load(fullfile(tempdir,'data','ROI_Mask'));
         % reconstruct network
         allpts_IncludeDup = [];
         Overlay_Map = zeros(size(L));
@@ -694,16 +694,16 @@ switch A
         B = B{1};
         plot(B(:,2),B(:,1),'.','color',[1 1 1],'MarkerSize',6);hold on;
         
-        mkdir(fullfile('result'));
-        saveas(figure(1),fullfile('result','Extracted_Filaments.fig'));
+        mkdir(fullfile(tempdir,'result'));
+        saveas(figure(1),fullfile(tempdir,'result','Extracted_Filaments.fig'));
     case 2
         warning off;
         close(figure(1));close(figure(2));
-        load(fullfile('data','R.mat'));
-        load(fullfile('data','OriginImg.mat'));
-        load(fullfile('data','L.mat'));
-        load(fullfile('data','all_sorted_filament.mat'),'all_sorted_filament');
-        load(fullfile('data','ROI_Mask'));
+        load(fullfile(tempdir,'data','R.mat'));
+        load(fullfile(tempdir,'data','OriginImg.mat'));
+        load(fullfile(tempdir,'data','L.mat'));
+        load(fullfile(tempdir,'data','all_sorted_filament.mat'),'all_sorted_filament');
+        load(fullfile(tempdir,'data','ROI_Mask'));
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
         
         
@@ -728,7 +728,7 @@ switch A
         end
         [x y] = find(CroMap==1);
         NewCrPts = [x y];
-        save(fullfile('data','NewCrPts.mat'),'NewCrPts');
+        save(fullfile(tempdir,'data','NewCrPts.mat'),'NewCrPts');
         
         disF=bwdist(bwmorph(ROI_Mask,'remove'));
         mask = ROI_Mask;
@@ -758,19 +758,19 @@ switch A
         ylabel('Frequency');
         xlabel('Distance to Cell Edge (\mum)');
         title('Distribution of Junctions');
-        mkdir(fullfile('result'));
-        saveas(figure(1),fullfile('result','Distribution_Junctions.fig'));
-        saveas(figure(2),fullfile('result','Distribution_Junctions_Analysis.fig'));
+        mkdir(fullfile(tempdir,'result'));
+        saveas(figure(1),fullfile(tempdir,'result','Distribution_Junctions.fig'));
+        saveas(figure(2),fullfile(tempdir,'result','Distribution_Junctions_Analysis.fig'));
         
         
     case 3
         warning off;
         close(figure(1));close(figure(2));
         
-        load(fullfile('data','all_sorted_filament.mat'));
-        load(fullfile('data','AnalysisInfo.mat'));
-        load(fullfile('data','L'));
-        load(fullfile('data','ROI_Mask'));
+        load(fullfile(tempdir,'data','all_sorted_filament.mat'));
+        load(fullfile(tempdir,'data','AnalysisInfo.mat'));
+        load(fullfile(tempdir,'data','L'));
+        load(fullfile(tempdir,'data','ROI_Mask'));
         % plot of information of all filaments
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
         figure(1);
@@ -779,8 +779,8 @@ switch A
         axis square;
         title('Histogram of Filaments Orientations');
         
-        mkdir(fullfile('result'));
-        saveas(figure(1),fullfile('result','Histogram_of_Orientations.fig'));
+        mkdir(fullfile(tempdir,'result'));
+        saveas(figure(1),fullfile(tempdir,'result','Histogram_of_Orientations.fig'));
         
         allc = AnalysisInfo(:,4:5);
         disF=bwdist(bwmorph(ROI_Mask,'remove'));
@@ -805,15 +805,15 @@ switch A
         set(gca,'ytick',[]);
         xlabel('Distance to Cell Edge (\mum)');ylabel('-90 degrees to 90 degrees');
         title('Distribution of Filament Orientations');
-        saveas(figure(2),fullfile('result','Distribution_Orientations.fig'));
+        saveas(figure(2),fullfile(tempdir,'result','Distribution_Orientations.fig'));
         
         
     case 4
         warning off;
         close(figure(1));close(figure(2));
-        load(fullfile('data','all_sorted_filament'));
-        load(fullfile('data','ROI_Mask'));
-        load(fullfile('data','AllFragments'));
+        load(fullfile(tempdir,'data','all_sorted_filament'));
+        load(fullfile(tempdir,'data','ROI_Mask'));
+        load(fullfile(tempdir,'data','AllFragments'));
         curR = round(str2num(get(handles.FanR,'String'))/2);
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
         
@@ -916,23 +916,23 @@ switch A
         plot(x1*0.02, y1,  'r');hold on;axis([0 inf 0 inf]);
         xlabel('Distance to Cell Edge (unit: \mum)');ylabel('Mean Curvature (unit: \mum^-^1)');
         title('Distribution of Curvatures');
-        save(fullfile('data','all_filament_curs.mat'),'all_filament_curs');
-        mkdir(fullfile('result'));
-        saveas(figure(1),fullfile('result','Distribution_of_Curvatures.fig'));
-        saveas(figure(2),fullfile('result','Distribution_of_Curvatures_Analysis.fig'));
+        save(fullfile(tempdir,'data','all_filament_curs.mat'),'all_filament_curs');
+        mkdir(fullfile(tempdir,'result'));
+        saveas(figure(1),fullfile(tempdir,'result','Distribution_of_Curvatures.fig'));
+        saveas(figure(2),fullfile(tempdir,'result','Distribution_of_Curvatures_Analysis.fig'));
         
     case 5
         warning off;
         close(figure(1));close(figure(2));
-        load(fullfile('data','AnalysisInfo'));
-        load(fullfile('data','all_sorted_filament'));
-        load(fullfile('data','NewCrPts'));
-        load(fullfile('data','Size_Junc'));
-        load(fullfile('data','ROI_Mask'));
-        load(fullfile('data','L.mat'));
-        load(fullfile('data','all_tips.mat'));
-        load(fullfile('data','all_connects.mat'));
-        load(fullfile('data','all_connects_shortlist.mat'));
+        load(fullfile(tempdir,'data','AnalysisInfo'));
+        load(fullfile(tempdir,'data','all_sorted_filament'));
+        load(fullfile(tempdir,'data','NewCrPts'));
+        load(fullfile(tempdir,'data','Size_Junc'));
+        load(fullfile(tempdir,'data','ROI_Mask'));
+        load(fullfile(tempdir,'data','L.mat'));
+        load(fullfile(tempdir,'data','all_tips.mat'));
+        load(fullfile(tempdir,'data','all_connects.mat'));
+        load(fullfile(tempdir,'data','all_connects_shortlist.mat'));
         
         % generate information of all filaments
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
@@ -961,7 +961,7 @@ switch A
         FragID = [FragID; FragID];
         FragID = FragID(:);
         InfoExcel = [FragID, InfoExcel];
-        save(fullfile('data','InfoExcel.mat'),'InfoExcel');
+        save(fullfile(tempdir,'data','InfoExcel.mat'),'InfoExcel');
         close(h);
         InfoExcel = [titles;num2cell(InfoExcel)];
         
@@ -984,9 +984,9 @@ switch A
                 parpool ('local',feature('numCores'));
             end
             % parellel computing is used and it may take a few minutes for large data set
-            load(fullfile('data','L.mat'));
+            load(fullfile(tempdir,'data','L.mat'));
             L = L;
-            load(fullfile('data','all_tips.mat'));
+            load(fullfile(tempdir,'data','all_tips.mat'));
             all_tips = all_tips;
             parfor i = 1:num
                 FragmentInfo(i,:) = GenFragmentInfo(L,i,all_tips,FragmentInfo(i,:));
@@ -996,7 +996,7 @@ switch A
         
         sumlist = sum(FragmentInfo,1);
         FragmentInfo(:,(find(sumlist==0))) = [];
-        save(fullfile('data','FragmentInfo.mat'),'FragmentInfo');
+        save(fullfile(tempdir,'data','FragmentInfo.mat'),'FragmentInfo');
         MaxFragL = size(FragmentInfo,2)-6;
         display('Fragment Information Generated !');
         titles = {'Fragment ID','# of Pixels','Beginning X','Beginning Y','Ending X','Ending Y'};
@@ -1016,7 +1016,7 @@ switch A
             end
             close(h);
         else
-            load(fullfile('data','L.mat'));
+            load(fullfile(tempdir,'data','L.mat'));
             L = L;
             parfor i = 1:size(all_connects,3)
                 LinkInfo(:,:,i) = GenLinkageInfo(i,L,all_connects(:,:,i),LinkInfo(:,:,i));
@@ -1040,7 +1040,7 @@ switch A
         sumlist = sum(LinkageInfo1,1);
         LinkageInfo1(find(LinkageInfo1(:,1)==0),:) = [];
         LinkageInfo1(:,(find(sumlist==0))) = [];
-        save(fullfile('data','LinkageInfo1.mat'),'LinkageInfo1');
+        save(fullfile(tempdir,'data','LinkageInfo1.mat'),'LinkageInfo1');
         titles = {'Composite Filament ID','Fragment ID'};
         titles = [titles,repmat({'X','Y'},[1 (size(LinkageInfo1,2)-2)/2]) ];
         LinkageInfo1 = [titles;num2cell(LinkageInfo1)];
@@ -1079,14 +1079,14 @@ switch A
         sumlist = sum(LinkageInfo2,1);
         LinkageInfo2(find(LinkageInfo2(:,1)==0),:) = [];
         LinkageInfo2(:,(find(sumlist==0))) = [];
-        save(fullfile('data','LinkageInfo2.mat'),'LinkageInfo2');
+        save(fullfile(tempdir,'data','LinkageInfo2.mat'),'LinkageInfo2');
         titles = {'Composite Filament ID','Fragment ID'};
         titles = [titles,repmat({'X','Y'},[1 (size(LinkageInfo2,2)-2)/2]) ];
         LinkageInfo2 = [titles;num2cell(LinkageInfo2)];
         
-        mkdir(fullfile('result'));
+        mkdir(fullfile(tempdir,'result'));
         % write inforamtion to excel
-        cd(fullfile('result'));
+        cd(fullfile(tempdir,'result'));
         
         xlswrite('IntegratedInfo.xlsx',InfoExcel,1,'A1');
         xlswrite('IntegratedInfo.xlsx',FragmentInfo,2,'A1');
@@ -1126,7 +1126,7 @@ ShortFilamentEdit = str2num(get(handles.ShortFilamentEdit,'String'));
 MaxCur = str2num(get(handles.MaxCurEdit,'String'));
 
 % save','user settings
-fileID = fopen(fullfile('UserSettings','GroupingSettings.txt'),'w');
+fileID = fopen(fullfile(gethome,'UserSettings','GroupingSettings.txt'),'w');
 fprintf(fileID,['Radius of Searching Fan (pixels):              ',num2str(FanR),'\r\n']);
 fprintf(fileID,['Angle of Searching Fan (degrees):              ',num2str(EditFanAngle),'\r\n']);
 fprintf(fileID,['Criterion1 (Orientation Difference) (degrees): ',num2str(C1),'\r\n']);
@@ -1287,5 +1287,5 @@ function OptManualGUIBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 FanR = str2num(get(handles.FanR,'String'));
-save(fullfile('data','FanR.mat'),'FanR');
+save(fullfile(tempdir,'data','FanR.mat'),'FanR');
 ManCorr;
