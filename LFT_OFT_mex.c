@@ -94,7 +94,7 @@ void Initialization(double *Img, double *EImg, double *LFT_Img, double *LFT_Orie
     
 }
 
-void mexFunction(int iNbOut, mxArray *pmxOut[], int iNbIn,  mxArray *pmxIn[])
+void mexFunction(int iNbOut, mxArray *pmxOut[], int iNbIn,  const mxArray *pmxIn[])
 {
     #define InputImg                 pmxIn[0]
     #define pR                       pmxIn[1]

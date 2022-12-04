@@ -3,6 +3,8 @@
 % 
 % Developers: Zhen Zhang, Pakorn Kanchanawong
 % Contact: biekp@nus.edu.sg
+
+
 function varargout = LoadImg(varargin)
 % LOADIMG MATLAB code for LoadImg.fig
 %      LOADIMG, by itself, creates a new LOADIMG or raises the existing
@@ -84,6 +86,9 @@ function load_button_Callback(hObject, eventdata, handles)
 % hObject    handle to load_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+    handles
+
     warning off;
     close(figure(1));
     imgpath=imgetfile;

@@ -153,8 +153,8 @@ function Preview_FT_Callback(hObject, eventdata, handles)
     save(fullfile(tempdir,'data','NofOrientations_FT.mat'),'NofOrientations_FT');
     [H W] = size(mask);
     AngleList = 0:pi/NofOrientations_FT:pi-pi/NofOrientations_FT;
-    PtsSide1 = [(R*cos(AngleList)+W/2-6)'      (R*sin(AngleList)+H/2-6)'];
-    PtsSide2 = [(R*cos(AngleList+pi)+W/2-6)'   (R*sin(AngleList+pi)+H/2-6)'];
+    PtsSide1 = [(R*cos(AngleList)+round(W/2))'      (R*sin(AngleList)+round(H/2))'];
+    PtsSide2 = [(R*cos(AngleList+pi)+round(W/2))'   (R*sin(AngleList+pi)+round(H/2))'];
 
     PtsAll = [PtsSide1;PtsSide2;PtsSide1(1,1) PtsSide1(1,2)];
     figure('name','Check Parameters before Filter Transform');
@@ -165,12 +165,12 @@ function Preview_FT_Callback(hObject, eventdata, handles)
     ImgH=imshow(mask);
 
     % For some reasons on Linux and Mac the subsequent plot calls are not directed to the figure
-    % where the mask was displayed. Likely the mouse interaction with the LFT window's 'Preview'
+    % where 'mask' was displayed. Likely the mouse interaction with the LFT window's 'Preview'
     % button switches the graphic context.
 
-    % Determining the graphic context from the ImgH Image handle, assuming ImgH is an Image
+    % Determining the graphic context from the ImgH graphic handle, assuming ImgH is an Image
     % type handle which is a direct child of an Axes type object, which in turn is a direct
-    % child of the Figure object
+    % child of the Figure object we need in order to switch context
 
     figure(get(get(ImgH,'Parent'),'Parent'));
     hold on;axis off;
@@ -212,10 +212,12 @@ function RunFTmexFunctionButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     close(figure(1));
+
     load(fullfile(tempdir,'data','R.mat'),'R');
     load(fullfile(tempdir,'data','NofOrientations_FT.mat'),'NofOrientations_FT');
-    load(fullfile(tempdir,'data','OriginImg.mat'));
     load(fullfile(tempdir,'data','ROI_Mask'));
+
+    load(fullfile(tempdir,'data','OriginImg.mat'));
     [H W] = size(OriginImg);
 
     %
@@ -287,16 +289,26 @@ function ROIpolyBtn_Callback(hObject, eventdata, handles)
     save(fullfile(tempdir,'data','NofOrientations_FT.mat'),'NofOrientations_FT');
     load(fullfile(tempdir,'data','OriginImg'));
     close(figure(1));
-    I = zeros(size(OriginImg,1)+2*R, size(OriginImg,2)+2*R);
-    I(R+1:size(I,1)-R,R+1:size(I,2)-R) = OriginImg;
-    current_figure=figure('name','Please Select the Region of Interest');
+
+    I = zeros(size(OriginImg,1)+2*R,size(OriginImg,2)+2*R,class(OriginImg));
+    I(R+1:R+size(OriginImg,1),R+1:R+size(OriginImg,2)) = OriginImg;
+    
+    fprintf(1,"OriginImg: %d,%d (%s)\n",size(OriginImg,1),size(OriginImg,2),class(OriginImg));
+    fprintf(1,"I: %d,%d (%s)\n",size(I,1),size(I,2),class(I));
+    %max(I(:))
+    %min(I(:))
 
     % See the Preview callback function for explanation
 
-    ImgH=imshow(mat2gray(I));
+    current_figure=figure('name','Please Select the Region of Interest');
+    ImgH=imshow(I);
     figure(get(get(ImgH,'Parent'),'Parent'));
     
+    D = I(R+1:R+size(OriginImg,1),R+1:R+size(OriginImg,2)) - mat2gray(OriginImg);
+    numel(find(D(:) > 0))
+
     ROI_Mask = roipoly;
+    %ROI_Mask = ones(R+1:R+size(OriginImg,1),R+1:R+size(OriginImg,2));
     save(fullfile(tempdir,'data','ROI_Mask.mat'),'ROI_Mask');
     msgbox('ROI Selected !');
     close(figure(1));

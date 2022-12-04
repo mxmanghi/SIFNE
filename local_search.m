@@ -105,7 +105,9 @@ if ~isempty(index_global_pool)
         index_global_pool(find(index_global_pool==0)) = [];
         
         if ~isempty(ShortListCandidateTips)
-            % remove tips whose inner fragments exist; another concern is that an entire fragment is included in the searching region. this is ok because farther tip could be removed according to condition1
+            % remove tips whose inner fragments exist; another concern is
+            % that an entire fragment is included in the searching region.
+            % This is ok because farther tip could be removed according to condition1
             delete_list = [];
             FanTipsX = CandidateTips(:,1);
             FanTipsY = CandidateTips(:,2);
