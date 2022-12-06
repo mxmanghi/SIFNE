@@ -140,6 +140,9 @@ function RegTipsBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to RegTipsBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fprintf(1,"Executing RegTipsBtn_Callback\n");
+
 load(fullfile(tempdir,'data','AllFragments.mat'));
 load(fullfile(tempdir,'data','Allpts.mat'));
 load(fullfile(tempdir,'data','L.mat'));
@@ -183,7 +186,11 @@ all_tips = [all_tips, tempInfo];
 
 close(figure(1));
 figure('name','All Tips Detected (Orientations of 500 Tips Have Been Shown)');
-imshow(mat2gray(AllFragments));hold on; axis off;plot(all_tips(:,2),all_tips(:,1),'r+');
+ImgH=imshow(mat2gray(AllFragments));
+
+figure(get(get(ImgH,'Parent'),'Parent'));
+
+hold on; axis off;plot(all_tips(:,2),all_tips(:,1),'r+');
 for i = 1:100
     idx = ceil(rand * size(all_tips,1));
     text(all_tips(idx,2),all_tips(idx,1),[num2str(all_tips(idx,4))],'color','g');
@@ -198,6 +205,7 @@ function RemoveShortBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % remove very short fragment
 
+fprintf(1,"Executing RemoveShortBtn_Callback\n");
 load(fullfile(tempdir,'data','AllFragments.mat'));
 load(fullfile(tempdir,'data','R.mat'))
 load(fullfile(tempdir,'data','OriginImg.mat'))
@@ -213,8 +221,11 @@ save(fullfile(tempdir,'data','Allpts.mat'),'Allpts');
 save(fullfile(tempdir,'data','L.mat'),'L','num');
 close(figure(1));
 figure('name','Filtered Skeleton (Short Filaments Removed)');
-imshow(mat2gray(OriginImg));hold on;
-plot(y-R,x-R,'r.');axis off;
+ImgH=imshow(mat2gray(OriginImg));
+
+figure(get(get(ImgH,'Parent'),'Parent'));
+hold on; axis off;
+plot(y-R,x-R,'r.');
 % remove very short fragment
 
 
@@ -225,7 +236,7 @@ function RemoveCrossBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % remove margin information below
-
+fprintf(1,"Executing RemoveCrossBtn_Callback\n");
 load(fullfile(tempdir,'data','RawSke.mat'));
 load(fullfile(tempdir,'data','OriginImg.mat'));
 load(fullfile(tempdir,'data','R.mat'));
@@ -299,7 +310,12 @@ save(fullfile(tempdir,'data','Size_Junc.mat'),'Size_Junc');
 save(fullfile(tempdir,'data','RawCrPts.mat'),'RawCrPts');
 close(figure(1));
 figure('name','Individual Filamentous Fragments');
-imshow(mat2gray(OriginImg));hold on;plot(y-R,x-R,'r.');axis off;
+ImgH=imshow(mat2gray(OriginImg));
+
+figure(get(get(ImgH,'Parent'),'Parent'));
+
+hold on;axis off;
+plot(y-R,x-R,'r.');
 % remove clusters of single points
 
 
@@ -504,7 +520,11 @@ AllFragments = IterGenFragment(OriginImg, ...
 Allpts = [x y];
 close(figure(1));
 figure('name','Ultimate Fragments After Iterative Processing');
-imshow(mat2gray(OriginImg));hold on;
+ImgH=imshow(mat2gray(OriginImg));
+
+figure(get(get(ImgH,'Parent'),'Parent'));
+hold on;axis off;
+
 plot(y-R,x-R,'r.');axis off;
 msgbox('Iterative Extraction of Fragments Done !');
 

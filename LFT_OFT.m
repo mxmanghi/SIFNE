@@ -302,10 +302,15 @@ function ROIpolyBtn_Callback(hObject, eventdata, handles)
 
     current_figure=figure('name','Please Select the Region of Interest');
     ImgH=imshow(I);
+    hold;axis off;
+
+    % again we assume the figure identification is two levels up in the
+    % graphical object hierarchy
+
     figure(get(get(ImgH,'Parent'),'Parent'));
     
-    D = I(R+1:R+size(OriginImg,1),R+1:R+size(OriginImg,2)) - mat2gray(OriginImg);
-    numel(find(D(:) > 0))
+    %D = I(R+1:R+size(OriginImg,1),R+1:R+size(OriginImg,2)) - mat2gray(OriginImg);
+    %numel(find(D(:) > 0))
 
     ROI_Mask = roipoly;
     %ROI_Mask = ones(R+1:R+size(OriginImg,1),R+1:R+size(OriginImg,2));

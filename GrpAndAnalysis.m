@@ -318,11 +318,11 @@ end
 save(fullfile(tempdir,'data','all_tips.mat'),'all_tips');
 
 % ****** structure of all_tips so far ******   #: Number
-%           colume1            colume2           colume3         colume4         colume5            colume6        colume7          colume8          colume9               colume10                colume11          ...
-% tip1     # of Row           # of Col           Labeled #     Orientation     Row # Center      Col # Center   global index      # of Lives     index of partner1     index of partner2       index of partner3     ...
-% tip2     # of Row           # of Col           Labeled #     Orientation     Row # Center      Col # Center   global index      # of Lives     index of partner1     index of partner2       index of partner3     ...
-% tip3     # of Row           # of Col           Labeled #     Orientation     Row # Center      Col # Center   global index      # of Lives     index of partner1     index of partner2       index of partner3     ...
-% tip4     # of Row           # of Col           Labeled #     Orientation     Row # Center      Col # Center   global index      # of Lives     index of partner1     index of partner2       index of partner3     ...
+%       column1   column2   column3     column4       column5        column6         column7       column8       column9            column10             column11        ...
+% tip1 # of Row| # of Col| Label   # | Orientation | Row # Center | Col # Center | global index | # of Lives | index of partner1 | index of partner2 |index of partner3  ...
+% tip2 # of Row| # of Col| Labeled # | Orientation | Row # Center | Col # Center | global index | # of Lives | index of partner1 | index of partner2 |index of partner3  ...
+% tip3 # of Row| # of Col| Labeled # | Orientation | Row # Center | Col # Center | global index | # of Lives | index of partner1 | index of partner2 |index of partner3  ...
+% tip4 # of Row| # of Col| Labeled # | Orientation | Row # Center | Col # Center | global index | # of Lives | index of partner1 | index of partner2 |index of partner3  ...
 % ......
 % ****** structure of all_tips so far ******   #: Number
 % assign number of lives to each fragments according to the max number of lives of its two tips
@@ -333,9 +333,12 @@ function SortingBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to SortingBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fprintf(1,'Executing SortingBtn_Callback...\n');
+
 close(figure(1));
-load(fullfile(tempdir,'data','all_filament.mat'));
-load(fullfile(tempdir,'data','all_connects.mat'));
+load(fullfile(tempdir,'data','all_filament.mat'),'all_filament');
+load(fullfile(tempdir,'data','all_connects.mat'),'all_connects');
 load(fullfile(tempdir,'data','L'));
 
 maskI = zeros(size(L));
@@ -433,6 +436,10 @@ function RemoveShortBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to RemoveShortBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fprintf(1,'Executing RemoveShortBtn_Callback...\n');
+
+
 close(figure(1));
 close(figure(2));
 
@@ -487,6 +494,8 @@ function QuickGrp_Callback(hObject, eventdata, handles)
 % hObject    handle to QuickGrp (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fprintf(1,'Executing QuickGrp_Callback...\n');
 
 % filamentous fragment grouping starts
 close(figure(1));
@@ -636,6 +645,8 @@ function AnalysisList_CreateFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
+fprintf(1,'Executing Analysis_CreateFcn...\n');
+
 % Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
@@ -648,6 +659,8 @@ function RunAnalysisBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to RunAnalysisBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+fprintf(1,'Executing RunAnalysisBtn_Callback...\n');
 
 A = get(handles.AnalysisList,'Value');
 switch A
