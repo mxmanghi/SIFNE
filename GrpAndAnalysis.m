@@ -944,8 +944,8 @@ switch A
         load(fullfile(tempdir,'data','ROI_Mask'));
         load(fullfile(tempdir,'data','L.mat'));
         load(fullfile(tempdir,'data','all_tips.mat'));
-        load(fullfile(tempdir,'data','all_connects.mat'));
-        load(fullfile(tempdir,'data','all_connects_shortlist.mat'));
+        load(fullfile(tempdir,'data','all_connects.mat'),'all_connects');
+        load(fullfile(tempdir,'data','all_connects_shortlist.mat'),'all_connects_shortlist');
         
         % generate information of all filaments
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
