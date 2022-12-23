@@ -11,18 +11,23 @@
 
 # define PI 3.141593
 
-void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orientations, int H, int W, double R, double Nangles, double *ROIMask)
+void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orientations, int H, int W, int R, double Nangles, double *ROIMask)
 {
     int i,j,x,y,MaxIndex;
     double q;
     double k, AngleInterval, Rho, Theta;
     double MaxAngleIntensity, LineSum, MaxIntensityAngle;
-    
+    int imgHeight;
+    int imgWidth;
+
     AngleInterval = PI/Nangles;
+    imgHeight = H - R;
+    imgWidth  = W - R;
     // LFT
-    for(i=(int)R; i<(int)W-(int)R; i++)
+    mexPrintf("Computing the LFT...\n");
+    for(i=R; i<imgWidth; i++)
     {
-        for(j=(int)R; j<(int)H-(int)R; j++)
+        for(j=(int)R; j<imgHeight; j++)
         {   
             if (ROIMask[(i*(int)H + j)]==1.0)
             {
@@ -31,10 +36,10 @@ void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orienta
                 for(k=-PI/2.0; k<PI/2.0; k=k+AngleInterval)
                 {
                     LineSum = 0;
-                    for(q=-R; q<R+1.0; q++)
+                    for(q=-R;q<(R+1);q++)
                     {
-                        x = i + (int)floor(q *cos(k)+0.5);
-                        y = j - (int)floor(q *sin(k)+0.5);
+                        x = i + (int)floor(q * cos(k)+0.5);
+                        y = j - (int)floor(q * sin(k)+0.5);
                         if(x<0)     x=0;
                         if(y<0)     y=0;
                         if(x>(W-1)) x=W-1;
@@ -53,11 +58,12 @@ void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orienta
         }
     }
     // OFT
-    for(i=(int)R; i<(int)W-(int)R; i++)
+    mexPrintf("Computing the OFT...\n");
+    for(i=R; i<imgWidth; i++)
     {
-        for(j=(int)R; j<(int)H-(int)R; j++)
+        for(j=R; j<imgHeight; j++)
         {
-            if (ROIMask[(i*(int)H + j)]==1.0)
+            if (ROIMask[(i*H + j)]==1.0)
             {
                 MaxAngleIntensity = 0;
                 for(k=-PI/2; k<PI/2; k=k+AngleInterval)
@@ -66,8 +72,8 @@ void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orienta
                     for(q=-R; q<R+1; q++)
                     {
                         Rho = LFT_Img[i*H + j];
-                        x = i + (int)floor(q *cos(k)+0.5);
-                        y = j - (int)floor(q *sin(k)+0.5);
+                        x = i + (int)floor(q*cos(k)+0.5);
+                        y = j - (int)floor(q*sin(k)+0.5);
                         if(x<0)     x=0;
                         if(y<0)     y=0;
                         if(x>(W-1)) x=W-1;
@@ -90,7 +96,7 @@ void Initialization(double *Img, double *EImg, double *LFT_Img, double *LFT_Orie
     dim[0] = H;
     dim[1] = W;
     
-    Enhancement(Img, EImg, LFT_Img, LFT_Orientations, H, W, R, Nangles, ROIMask);
+    Enhancement(Img, EImg, LFT_Img, LFT_Orientations, H, W, (int)floor(R), Nangles, ROIMask);
     
 }
 
