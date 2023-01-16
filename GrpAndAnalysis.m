@@ -1306,10 +1306,3 @@ FanR = str2num(get(handles.FanR,'String'));
 save(fullfile(tempdir,'data','FanR.mat'),'FanR');
 ManCorr;
 
-
-% --- If Enable == 'on', executes on mouse press in 5 pixel border.
-% --- Otherwise, executes on mouse press in 5 pixel border or over QuickGrp.
-function QuickGrp_ButtonDownFcn(hObject, eventdata, handles)
-% hObject    handle to QuickGrp (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
