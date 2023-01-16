@@ -28,7 +28,7 @@ function varargout = GrpAndAnalysis(varargin)
 
 % Edit the above text to modify the response to help GrpAndAnalysis
 
-% Last Modified by GUIDE v2.5 06-Jun-2016 16:12:07
+% Last Modified by GUIDE v2.5 10-Jan-2023 11:21:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -89,17 +89,20 @@ close(figure(1));
 load(fullfile(tempdir,'data','AllFragments'));
 load(fullfile(tempdir,'data','all_tips'));
 figure('name','Image of All Filamentous Fragments');
-imshow(mat2gray(AllFragments));axis off;title('Please double-click the tip where you want to check the region for searching');
+ImgH=imshow(mat2gray(AllFragments));axis off;title('Please double-click the tip where you want to check the region for searching');
 [Y1 X1]= ginput(1);
 k = dsearchn(all_tips(:,1:2),[X1 Y1]);
 k = k(1);
 BasePt = all_tips(k,:);
 FanR = str2num(get(handles.FanR,'String'));
 FanAngle = str2num(get(handles.EditFanAngle,'String'));
+
 FanEdge = FanPreview(FanAngle, AllFragments, FanR, BasePt(4), BasePt(1:2));
 close(figure(1));
+
 figure('name','Check the Region for Searching Partners');
-imshow(mat2gray(AllFragments));hold on; axis off;
+ImgH=imshow(mat2gray(AllFragments));hold on; axis off;
+figure(get(get(ImgH,'Parent'),'Parent'));
 plot(FanEdge(:,2), FanEdge(:,1), 'g', 'LineWidth', 2);
 
 
@@ -1302,3 +1305,11 @@ function OptManualGUIBtn_Callback(hObject, eventdata, handles)
 FanR = str2num(get(handles.FanR,'String'));
 save(fullfile(tempdir,'data','FanR.mat'),'FanR');
 ManCorr;
+
+
+% --- If Enable == 'on', executes on mouse press in 5 pixel border.
+% --- Otherwise, executes on mouse press in 5 pixel border or over QuickGrp.
+function QuickGrp_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to QuickGrp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
