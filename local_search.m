@@ -9,9 +9,9 @@ MIN_Angle_Diff = Min_Info(1);
 MIN_Dist = Min_Info(2);
 MIN_GapAngle_Diff = Min_Info(3);
 
-load data/AllFragments.mat;
-load data/OriginImg.mat;
-load data/R.mat;
+load(fullfile(tempdir,'data','AllFragments.mat'));
+load(fullfile(tempdir,'data','OriginImg.mat'));
+load(fullfile(tempdir,'data','R.mat'));
 
 All_Dist = sqrt( (all_tips(:,1)-base_loc(1)).^2  +  (all_tips(:,2)-base_loc(2)).^2);
 All_Dist(find(All_Dist==0)) = 3*MIN_Dist;
@@ -105,7 +105,9 @@ if ~isempty(index_global_pool)
         index_global_pool(find(index_global_pool==0)) = [];
         
         if ~isempty(ShortListCandidateTips)
-            % remove tips whose inner fragments exist; another concern is that an entire fragment is included in the searching region. this is ok because farther tip could be removed according to condition1
+            % remove tips whose inner fragments exist; another concern is
+            % that an entire fragment is included in the searching region.
+            % This is ok because farther tip could be removed according to condition1
             delete_list = [];
             FanTipsX = CandidateTips(:,1);
             FanTipsY = CandidateTips(:,2);
