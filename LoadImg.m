@@ -1,4 +1,4 @@
-% Copyright (c) 2016.
+       % Copyright (c) 2016.
 % All rights reserved. Please read the 'license.txt' for license terms.
 % 
 % Developers: Zhen Zhang, Pakorn Kanchanawong
@@ -87,13 +87,13 @@ warning off;
 close(figure(1));
 imgpath=imgetfile;
 mkdir data;
-save data\imgpath.mat imgpath;
+save data/imgpath.mat imgpath;
 OriginImg = imread(imgpath);
 if length(size(OriginImg))==3
     OriginImg = rgb2gray(OriginImg);
 end
 OriginImg = imadjust(im2uint8(OriginImg));
-save data\OriginImg.mat OriginImg;
+save data/OriginImg.mat OriginImg;
 close all;
 figure('name','Please Check The Image Loaded');
 imshow(OriginImg);axis off;

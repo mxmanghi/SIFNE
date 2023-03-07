@@ -110,15 +110,15 @@ warning off;
 close(figure(1));
 R = str2num(get(handles.R_input,'String'));
 NofOrientations_FT = str2num(get(handles.NumberofAnglesInput,'String'));
-load data\OriginImg.mat;
+load data/OriginImg.mat;
 I = OriginImg;
 [H W] = size(I);
 mask = uint8(zeros(H+R+R,W+R+R));
 mask(R+1:H+R,R+1:W+R) = I;
 ROI_Mask = ones(size(mask));
-save data\ROI_Mask.mat ROI_Mask;
-save data\R.mat R;
-save data\NofOrientations_FT.mat NofOrientations_FT;
+save data/ROI_Mask.mat ROI_Mask;
+save data/R.mat R;
+save data/NofOrientations_FT.mat NofOrientations_FT;
 [H W] = size(mask);
 AngleList = 0:pi/NofOrientations_FT:pi-pi/NofOrientations_FT;
 PtsSide1 = [(R*cos(AngleList)+W/2-6)'        (R*sin(AngleList)+H/2-6)'];
@@ -162,19 +162,19 @@ function RunFTmexFunctionButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 close(figure(1));
-load data\R.mat R;
-load data\NofOrientations_FT.mat NofOrientations_FT;
-load data\OriginImg.mat;
-load data\ROI_Mask;
+load data/R.mat R;
+load data/NofOrientations_FT.mat NofOrientations_FT;
+load data/OriginImg.mat;
+load data/ROI_Mask;
 [H W] = size(OriginImg);
 OriginImg_Margin = uint8(zeros(H+R+R,W+R+R));
 OriginImg_Margin(R+1:H+R,R+1:W+R) = OriginImg;
 
 [OFT_Img, LFT_Img, LFT_Orientations] = LFT_OFT_mex(double(OriginImg_Margin),double(R),double(NofOrientations_FT),double(ROI_Mask));
 msgbox('Transformation Done !');
-save data\OFT_Img.mat OFT_Img;
-save data\LFT_Img.mat LFT_Img;
-save data\LFT_Orientations.mat LFT_Orientations;
+save data/OFT_Img.mat OFT_Img;
+save data/LFT_Img.mat LFT_Img;
+save data/LFT_Orientations.mat LFT_Orientations;
 figure('name','Check the Enhanced Image');
 imshow(mat2gray(OFT_Img));axis off;
 
@@ -190,7 +190,7 @@ NumberofAnglesInput = str2num(get(handles.NumberofAnglesInput,'String'));
 
 mkdir UserSettings;
 % save user settings
-fileID = fopen('UserSettings\FilterTransformSettings.txt','w');
+fileID = fopen('UserSettings/FilterTransformSettings.txt','w');
 fprintf(fileID,['Radius for Transform (pixels):  ',num2str(R_input),'\r\n']);
 fprintf(fileID,['Number of Rotations:            ',num2str(NumberofAnglesInput),'\r\n']);
 
@@ -215,16 +215,16 @@ function ROIpolyBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 R = str2num(get(handles.R_input,'String'));
 NofOrientations_FT = str2num(get(handles.NumberofAnglesInput,'String'));
-save data\R.mat R;
-save data\NofOrientations_FT.mat NofOrientations_FT;
-load data\OriginImg;
+save data/R.mat R;
+save data/NofOrientations_FT.mat NofOrientations_FT;
+load data/OriginImg;
 close(figure(1));
 I = zeros(size(OriginImg,1)+2*R,  size(OriginImg,2)+2*R);
 I(R+1:size(I,1)-R,  R+1:size(I,2)-R) = OriginImg;
 figure('name','Please Select the Region of Interest');
 imshow(mat2gray(I));
 ROI_Mask = roipoly;
-save data\ROI_Mask.mat ROI_Mask;
+save data/ROI_Mask.mat ROI_Mask;
 msgbox('ROI Selected !');
 close(figure(1));
 

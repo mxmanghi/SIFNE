@@ -9,9 +9,9 @@ MIN_Angle_Diff = Min_Info(1);
 MIN_Dist = Min_Info(2);
 MIN_GapAngle_Diff = Min_Info(3);
 
-load data\AllFragments.mat;
-load data\OriginImg.mat;
-load data\R.mat;
+load data/AllFragments.mat;
+load data/OriginImg.mat;
+load data/R.mat;
 
 All_Dist = sqrt( (all_tips(:,1)-base_loc(1)).^2  +  (all_tips(:,2)-base_loc(2)).^2);
 All_Dist(find(All_Dist==0)) = 3*MIN_Dist;

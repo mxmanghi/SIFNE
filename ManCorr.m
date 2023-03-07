@@ -183,8 +183,8 @@ close(h);
 msgbox('Manual Correction Done !');
 AnalysisInfo = NewAnalysisInfo;
 all_sorted_filament = M_asf;
-save data\AnalysisInfo.mat AnalysisInfo;
-save data\all_sorted_filament.mat all_sorted_filament;
+save data/AnalysisInfo.mat AnalysisInfo;
+save data/all_sorted_filament.mat all_sorted_filament;
 
 
 
@@ -442,9 +442,9 @@ global Minitial_all_tips;
 global counter;
 counter = 1;
 close(figure(1));
-load data\R.mat;
-load data\OriginImg.mat;
-load data\all_sorted_filament.mat;
+load data/R.mat;
+load data/OriginImg.mat;
+load data/all_sorted_filament.mat;
 M_OriginMargin = zeros(size(OriginImg,1)+R+R, size(OriginImg,2)+R+R);
 M_OriginMargin((R+1):(size(OriginImg,1)+R),(R+1):(size(OriginImg,2)+R)) = mat2gray(OriginImg);
 M_asf = all_sorted_filament;
@@ -534,8 +534,8 @@ load ManCorrTempInfo\Minitial_all_tips.mat;
 load ManCorrTempInfo\counter.mat;
 
 close(figure(1));
-load data\R.mat;
-load data\OriginImg.mat;
+load data/R.mat;
+load data/OriginImg.mat;
 M_OriginMargin = zeros(size(OriginImg,1)+R+R, size(OriginImg,2)+R+R);
 M_OriginMargin((R+1):(size(OriginImg,1)+R),(R+1):(size(OriginImg,2)+R)) = mat2gray(OriginImg);
 h = waitbar(0,'preparing ...');

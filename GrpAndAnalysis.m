@@ -29,7 +29,6 @@ function varargout = GrpAndAnalysis(varargin)
 % Edit the above text to modify the response to help GrpAndAnalysis
 
 % Last Modified by GUIDE v2.5 06-Jun-2016 16:12:07
-
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -86,8 +85,8 @@ function PreviewBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 warning off;
 close(figure(1));
-load data\AllFragments;
-load data\all_tips;
+load data/AllFragments;
+load data/all_tips;
 figure('name','Image of All Filamentous Fragments');
 imshow(mat2gray(AllFragments));axis off;title('Please double-click the tip where you want to check the region for searching');
 [Y1 X1]= ginput(1);
@@ -196,9 +195,9 @@ function QuickSearch_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 close(figure(1));
-load data\all_tips.mat;
-load data\AllFragments;
-load data\L.mat;
+load data/all_tips.mat;
+load data/AllFragments;
+load data/L.mat;
 
 FanR = str2num(get(handles.FanR,'String'));
 FanAngle = str2num(get(handles.EditFanAngle,'String'));
@@ -272,7 +271,7 @@ for i = 1:size(new_partner_list,2)
         break;
     end
 end
-save data\new_partner_list.mat new_partner_list;
+save data/new_partner_list.mat new_partner_list;
 
 all_tips(:,7) = 1:size(all_tips,1); % add global index to all tips
 all_tips(:,8) = ones(size(all_tips,1),1); % this reserves to indicates number of lives
@@ -296,7 +295,7 @@ close(h);
 [L num] = bwlabel(AllFragments,8);
 L_GlobalIndex = zeros(size(L));
 L_GlobalIndex(sub2ind(size(L),all_tips(:,1),all_tips(:,2))) = 1:length(all_tips(:,1));
-save data\L_GlobalIndex.mat L_GlobalIndex;
+save data/L_GlobalIndex.mat L_GlobalIndex;
 msgbox('Tip Search Done ! Please Proceed to GROUPING !');
 
 % assign number of lives to each fragments according to the max number of lives of its two tips
@@ -315,7 +314,7 @@ if Overlap == 1
     all_tips(:,8) = ones(size(all_tips,1),1); % if overlap is not allowed, the number of lives should be '1'
 end
 
-save data\all_tips.mat all_tips;
+save data/all_tips.mat all_tips;
 
 % ****** structure of all_tips so far ******   #: Number
 %           colume1            colume2           colume3         colume4         colume5            colume6        colume7          colume8          colume9               colume10                colume11          ...
@@ -334,9 +333,9 @@ function SortingBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 close(figure(1));
-load data\all_filament.mat;
-load data\all_connects.mat;
-load data\L;
+load data/all_filament.mat all_filament;
+load data/all_connects.mat all_connects;
+load data/L;
 
 maskI = zeros(size(L));
 Fullength = 5*size(all_filament,1);
@@ -372,8 +371,8 @@ for i = 1:size(all_sorted_filament,1)
 end
 msgbox('Analysis and Sorting Done !');
 
-save data\all_sorted_filament.mat all_sorted_filament;
-save data\AnalysisInfo.mat AnalysisInfo;
+save data/all_sorted_filament.mat all_sorted_filament;
+save data/AnalysisInfo.mat AnalysisInfo;
 
 
 function EditPixelSize_Callback(hObject, eventdata, handles)
@@ -436,10 +435,10 @@ function RemoveShortBtn_Callback(hObject, eventdata, handles)
 close(figure(1));
 close(figure(2));
 
-load data\AnalysisInfo;
-load data\all_sorted_filament;
-load data\AllFragments.mat;
-load data\all_connects.mat;
+load data/AnalysisInfo;
+load data/all_sorted_filament;
+load data/AllFragments.mat;
+load data/all_connects.mat;
 
 ShortFilament= str2num(get(handles.ShortFilamentEdit,'String'));
 
@@ -478,9 +477,9 @@ if RemoveUngrp==1
 end
 % remove ungrouped above
 all_connects_shortlist = all_connects;
-save data\AnalysisInfo.mat AnalysisInfo;
-save data\all_sorted_filament.mat all_sorted_filament;
-save data\all_connects_shortlist.mat all_connects_shortlist;
+save data/AnalysisInfo.mat AnalysisInfo;
+save data/all_sorted_filament.mat all_sorted_filament;
+save data/all_connects_shortlist.mat all_connects_shortlist;
 
 % --- Executes on button press in QuickGrp.
 function QuickGrp_Callback(hObject, eventdata, handles)
@@ -490,8 +489,8 @@ function QuickGrp_Callback(hObject, eventdata, handles)
 
 % filamentous fragment grouping starts
 close(figure(1));
-load data\L.mat;
-load data\all_tips.mat;
+load data/L.mat;
+load data/all_tips.mat;
 
 NofLives = all_tips(:,8);
 NofLives(find(NofLives==0)) = 1;
@@ -614,10 +613,10 @@ msgbox('Grouping Done !');
 close(h);
 close(figure(1));
 % filamentous fragment grouping ends
-save data\all_filament.mat all_filament;
-save data\all_connects.mat all_connects;
+save data/all_filament.mat all_filament;
+save data/all_connects.mat all_connects;
 all_connects_shortlist = all_connects;
-save data\all_connects_shortlist.mat all_connects_shortlist;
+save data/all_connects_shortlist.mat all_connects_shortlist;
 
 
 % --- Executes on selection change in AnalysisList.
@@ -654,12 +653,12 @@ switch A
     case 1
         warning off;
         close(figure(1));close(figure(2));
-        load data\R.mat;
-        load data\AllFragments.mat;
-        load data\L.mat;
-        load data\all_sorted_filament.mat all_sorted_filament;
-        load data\AnalysisInfo.mat;
-        load data\ROI_Mask;
+        load data/R.mat;
+        load data/AllFragments.mat;
+        load data/L.mat;
+        load data/all_sorted_filament.mat all_sorted_filament;
+        load data/AnalysisInfo.mat;
+        load data/ROI_Mask;
         % reconstruct network
         allpts_IncludeDup = [];
         Overlay_Map = zeros(size(L));
@@ -699,11 +698,11 @@ switch A
     case 2
         warning off;
         close(figure(1));close(figure(2));
-        load data\R.mat;
-        load data\OriginImg.mat;
-        load data\L.mat;
-        load data\all_sorted_filament.mat all_sorted_filament;
-        load data\ROI_Mask;
+        load data/R.mat;
+        load data/OriginImg.mat;
+        load data/L.mat;
+        load data/all_sorted_filament.mat all_sorted_filament;
+        load data/ROI_Mask;
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
         
         
@@ -728,7 +727,7 @@ switch A
         end
         [x y] = find(CroMap==1);
         NewCrPts = [x y];
-        save data\NewCrPts.mat NewCrPts;
+        save data/NewCrPts.mat NewCrPts;
         
         disF=bwdist(bwmorph(ROI_Mask,'remove'));
         mask = ROI_Mask;
@@ -767,10 +766,10 @@ switch A
         warning off;
         close(figure(1));close(figure(2));
         
-        load data\all_sorted_filament.mat;
-        load data\AnalysisInfo.mat;
-        load data\L;
-        load data\ROI_Mask;
+        load data/all_sorted_filament.mat;
+        load data/AnalysisInfo.mat;
+        load data/L;
+        load data/ROI_Mask;
         % plot of information of all filaments
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
         figure(1);
@@ -811,9 +810,9 @@ switch A
     case 4
         warning off;
         close(figure(1));close(figure(2));
-        load data\all_sorted_filament;
-        load data\ROI_Mask;
-        load data\AllFragments;
+        load data/all_sorted_filament;
+        load data/ROI_Mask;
+        load data/AllFragments;
         curR = round(str2num(get(handles.FanR,'String'))/2);
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
         
@@ -868,11 +867,23 @@ switch A
         end
         close(h);
         M = M/PixelSize;
-        figure(1);imagesc(M); colormap(jet);colorbar; title('Distribution of Curvatures');axis off;axis image;
-          
-        figure(2);
+         A = reshape (M,[],1);
+         B = nonzeros(A);
+            
+            figure(1);imagesc(M); colormap(jet);colorbar; title('Distribution of Curvatures');axis off;axis image;
+   
+         figure(2);
+        histogram(B, 'Normalization','probability');xlim([0 inf]);
+        filename='BSC1.xls.xls';
+           xlswrite(filename, B, 'sheet1');
+            
+            
+        figure(3);        
+   
         subplot(1,2,1);
-        histfit(all_mean_cur,50,'kernel');xlim([0 inf]);
+        histfit(all_mean_cur,20, 'kernel');xlim([0 inf]);
+        filename='mean_cur.xls';
+            xlswrite(filename, all_mean_cur', 'sheet1')
         xlabel('Curvature (unit: \mum^-^1)');ylabel('Frequency');
         title('Distribution of Means of Filament Curvatures');
 
@@ -909,30 +920,39 @@ switch A
             if length(k)>5
                 x1 = [x1  i];
                 y1 = [y1  mean(All_Curs_4plot(k,2))];
+                 
             end
+           
         end
         
         subplot(1,2,2);
         plot(x1*0.02, y1,  'r');hold on;axis([0 inf 0 inf]);
         xlabel('Distance to Cell Edge (unit: \mum)');ylabel('Mean Curvature (unit: \mum^-^1)');
         title('Distribution of Curvatures');
-        save data\all_filament_curs.mat all_filament_curs;
+        save data/all_filament_curs.mat all_filament_curs;
         mkdir result;
+        figure(4);
+        histogram(all_mean_cur,20, 'Normalization','probability');xlim([0 inf]);
+        filename='mean_cur.xls';
+            xlswrite(filename, all_mean_cur', 'sheet1')
+        xlabel('Curvature (unit: \mum^-^1)');ylabel('Frequency');
+        title('Normalized Distribution of Means of Filament Curvatures');
         saveas(figure(1),'result\Distribution_of_Curvatures.fig');
-        saveas(figure(2),'result\Distribution_of_Curvatures_Analysis.fig');
-        
+        saveas(figure(2),'result\Distribution_of_Curvatures_px_norm.fig');
+        saveas(figure(3),'result\Distribution_of_Curvatures_Analysis.fig');
+        saveas(figure(4),'result\Norm_Distribution_of_Curvatures_Analysis.fig');
     case 5
         warning off;
         close(figure(1));close(figure(2));
-        load data\AnalysisInfo;
-        load data\all_sorted_filament;
-        load data\NewCrPts;
-        load data\Size_Junc;
-        load data\ROI_Mask;
-        load data\L.mat;
-        load data\all_tips.mat;
-        load data\all_connects.mat;
-        load data\all_connects_shortlist.mat;
+        load data/AnalysisInfo;
+        load data/all_sorted_filament;
+        load data/NewCrPts;
+        load data/Size_Junc;
+        load data/ROI_Mask;
+        load data/L.mat;
+        load data/all_tips.mat;
+        load data/all_connects.mat all_connects;
+        load data/all_connects_shortlist.mat all_connects_shortlist;
         
         % generate information of all filaments
         PixelSize = str2num(get(handles.EditPixelSize,'String'));
@@ -945,7 +965,11 @@ switch A
             waitbar(i/size(all_sorted_filament,3),h);
             curr_filament = all_sorted_filament(:,:,i);
             curr_filament(find(curr_filament(:,1)==0),:) = [];
-            InfoExcel((i*2-1), 1:9) = [curr_filament(1,:), curr_filament(end,:), AnalysisInfo(i,:)];
+            
+            composed_info=[curr_filament(1,:), curr_filament(end,:), AnalysisInfo(i,:)];
+            composed_info=[composed_info zeros([1 9-numel(composed_info)])];
+            InfoExcel((i*2-1), 1:9) = composed_info;
+            
             temp = zeros(1,size(all_sorted_filament,1)*2);
             temp((1:size(all_sorted_filament,1))*2-1) = all_sorted_filament(:,1,i);
             temp((1:size(all_sorted_filament,1))*2) = all_sorted_filament(:,2,i);
@@ -961,7 +985,7 @@ switch A
         FragID = [FragID; FragID];
         FragID = FragID(:);
         InfoExcel = [FragID, InfoExcel];
-        save data\InfoExcel.mat InfoExcel;
+        save data/InfoExcel.mat InfoExcel;
         close(h);
         InfoExcel = [titles;num2cell(InfoExcel)];
         
@@ -984,9 +1008,9 @@ switch A
                 parpool ('local',feature('numCores'));
             end
             % parellel computing is used and it may take a few minutes for large data set
-            load data\L.mat;
+            load data/L.mat;
             L = L;
-            load data\all_tips.mat;
+            load data/all_tips.mat;
             all_tips = all_tips;
             parfor i = 1:num
                 FragmentInfo(i,:) = GenFragmentInfo(L,i,all_tips,FragmentInfo(i,:));
@@ -996,7 +1020,7 @@ switch A
         
         sumlist = sum(FragmentInfo,1);
         FragmentInfo(:,(find(sumlist==0))) = [];
-        save data\FragmentInfo.mat FragmentInfo;
+        save data/FragmentInfo.mat FragmentInfo;
         MaxFragL = size(FragmentInfo,2)-6;
         display('Fragment Information Generated !');
         titles = {'Fragment ID','# of Pixels','Beginning X','Beginning Y','Ending X','Ending Y'};
@@ -1016,7 +1040,7 @@ switch A
             end
             close(h);
         else
-            load data\L.mat;
+            load data/L.mat;
             L = L;
             parfor i = 1:size(all_connects,3)
                 LinkInfo(:,:,i) = GenLinkageInfo(i,L,all_connects(:,:,i),LinkInfo(:,:,i));
@@ -1040,7 +1064,7 @@ switch A
         sumlist = sum(LinkageInfo1,1);
         LinkageInfo1(find(LinkageInfo1(:,1)==0),:) = [];
         LinkageInfo1(:,(find(sumlist==0))) = [];
-        save data\LinkageInfo1.mat LinkageInfo1;
+        save data/LinkageInfo1.mat LinkageInfo1;
         titles = {'Composite Filament ID','Fragment ID'};
         titles = [titles,repmat({'X','Y'},[1 (size(LinkageInfo1,2)-2)/2]) ];
         LinkageInfo1 = [titles;num2cell(LinkageInfo1)];
@@ -1079,7 +1103,7 @@ switch A
         sumlist = sum(LinkageInfo2,1);
         LinkageInfo2(find(LinkageInfo2(:,1)==0),:) = [];
         LinkageInfo2(:,(find(sumlist==0))) = [];
-        save data\LinkageInfo2.mat LinkageInfo2;
+        save data/LinkageInfo2.mat LinkageInfo2;
         titles = {'Composite Filament ID','Fragment ID'};
         titles = [titles,repmat({'X','Y'},[1 (size(LinkageInfo2,2)-2)/2]) ];
         LinkageInfo2 = [titles;num2cell(LinkageInfo2)];
@@ -1126,7 +1150,7 @@ ShortFilamentEdit = str2num(get(handles.ShortFilamentEdit,'String'));
 MaxCur = str2num(get(handles.MaxCurEdit,'String'));
 
 % save user settings
-fileID = fopen('UserSettings\GroupingSettings.txt','w');
+fileID = fopen('UserSettings/GroupingSettings.txt','w');
 fprintf(fileID,['Radius of Searching Fan (pixels):              ',num2str(FanR),'\r\n']);
 fprintf(fileID,['Angle of Searching Fan (degrees):              ',num2str(EditFanAngle),'\r\n']);
 fprintf(fileID,['Criterion1 (Orientation Difference) (degrees): ',num2str(C1),'\r\n']);
@@ -1287,5 +1311,5 @@ function OptManualGUIBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 FanR = str2num(get(handles.FanR,'String'));
-save data\FanR.mat FanR;
+save data/FanR.mat FanR;
 ManCorr;
