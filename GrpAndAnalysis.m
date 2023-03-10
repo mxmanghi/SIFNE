@@ -957,7 +957,7 @@ switch A
         saveas(figure(1),fullfile(tempdir,'result','Distribution_of_Curvatures.fig'));
         saveas(figure(2),fullfile(tempdir,'result','Distribution_of_Curvatures_px_norm.fig'));
         saveas(figure(3),fullfile(tempdir,'result','Distribution_of_Curvatures_Analysis.fig'));
-        saveas(figure(4),fullfile(tempdir,'result','result\Norm_Distribution_of_Curvatures_Analysis.fig'));
+        saveas(figure(4),fullfile(tempdir,'result','Norm_Distribution_of_Curvatures_Analysis.fig'));
         
     case 5
         warning off;
