@@ -884,23 +884,22 @@ switch A
         end
         close(h);
         M = M/PixelSize;
-         A = reshape (M,[],1);
-         B = nonzeros(A);
+        A = reshape (M,[],1);
+        B = nonzeros(A);
             
-            figure(1);imagesc(M); colormap(jet);colorbar; title('Distribution of Curvatures');axis off;axis image;
+        figure(1);imagesc(M); colormap(jet);colorbar; title('Distribution of Curvatures');axis off;axis image;
    
-         figure(2);
+        figure(2);
         histogram(B, 'Normalization','probability');xlim([0 inf]);
-        filename='BSC1.xls.xls';
-           xlswrite(filename, B, 'sheet1');
-            
-            
-        figure(3);        
-   
+        filename='BSC1.xls';
+        writematrix(B,filename,'Sheet','sheet1');
+
+        figure(3);
+
         subplot(1,2,1);
-        histfit(all_mean_cur,20, 'kernel');xlim([0 inf]);
+        histfit(all_mean_cur,20,'kernel');xlim([0 inf]);
         filename='mean_cur.xls';
-            xlswrite(filename, all_mean_cur', 'sheet1')
+        writematrix(all_mean_cur',filename,'Sheet','sheet1')
         xlabel('Curvature (unit: \mum^-^1)');ylabel('Frequency');
         title('Distribution of Means of Filament Curvatures');
 
@@ -943,13 +942,13 @@ switch A
         end
         
         subplot(1,2,2);
-        plot(x1*0.02, y1,  'r');hold on;axis([0 inf 0 inf]);
+        plot(x1*0.02,y1,'r');hold on;axis([0 inf 0 inf]);
         xlabel('Distance to Cell Edge (unit: \mum)');ylabel('Mean Curvature (unit: \mum^-^1)');
         title('Distribution of Curvatures');
         figure(4);
         histogram(all_mean_cur,20, 'Normalization','probability');xlim([0 inf]);
         filename='mean_cur.xls';
-        xlswrite(filename, all_mean_cur', 'sheet1')
+        writematrix(all_mean_cur',filename,'Sheet','sheet1','WriteMode','append')
         xlabel('Curvature (unit: \mum^-^1)');ylabel('Frequency');
         title('Normalized Distribution of Means of Filament Curvatures');
         save(fullfile(tempdir,'data','all_filament_curs.mat'),'all_filament_curs');
@@ -1130,12 +1129,12 @@ switch A
         % write inforamtion to excel
         cd(fullfile(tempdir,'result'));
         
-        xlswrite('IntegratedInfo.xlsx',InfoExcel,1,'A1');
-        xlswrite('IntegratedInfo.xlsx',FragmentInfo,2,'A1');
-        xlswrite('IntegratedInfo.xlsx',LinkageInfo1,3,'A1');
-        xlswrite('IntegratedInfo.xlsx',LinkageInfo2,4,'A1');
+        writematrix(InfoExcel,'IntegratedInfo.xlsx','Sheet',1);
+        writematrix(FragmentInfo,'IntegratedInfo.xlsx','Sheet',2,'WriteMode','append');
+        writematrix(LinkageInfo1,'IntegratedInfo.xlsx','Sheet',3,'WriteMode','append');
+        writematrix(LinkageInfo2,'IntegratedInfo.xlsx','Sheet',4,'WriteMode','append');
         curDir = pwd;
-        filaname = [curDir,'\IntegratedInfo.xlsx'];
+        filaname = fullfile(curDir,'IntegratedInfo.xlsx');
         e = actxserver('Excel.Application');
         ewb = e.Workbooks.Open(filaname);
         ewb.Worksheets.Item(1).Name = 'Ultimate Filaments';
