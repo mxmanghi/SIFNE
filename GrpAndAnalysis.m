@@ -899,7 +899,7 @@ switch A
         subplot(1,2,1);
         histfit(all_mean_cur,20,'kernel');xlim([0 inf]);
         filename='mean_cur.xls';
-        writematrix(all_mean_cur',filename,'Sheet','sheet1')
+        writematrix(all_mean_cur',filename,'Sheet','Sheet1')
         xlabel('Curvature (unit: \mum^-^1)');ylabel('Frequency');
         title('Distribution of Means of Filament Curvatures');
 
@@ -948,7 +948,7 @@ switch A
         figure(4);
         histogram(all_mean_cur,20, 'Normalization','probability');xlim([0 inf]);
         filename='mean_cur.xls';
-        writematrix(all_mean_cur',filename,'Sheet','sheet1','WriteMode','append')
+        writematrix(all_mean_cur',filename,'Sheet','Sheet1','WriteMode','append')
         xlabel('Curvature (unit: \mum^-^1)');ylabel('Frequency');
         title('Normalized Distribution of Means of Filament Curvatures');
         save(fullfile(tempdir,'data','all_filament_curs.mat'),'all_filament_curs');
@@ -1129,10 +1129,10 @@ switch A
         % write inforamtion to excel
         cd(fullfile(tempdir,'result'));
         
-        writematrix(InfoExcel,'IntegratedInfo.xlsx','Sheet',1);
-        writematrix(FragmentInfo,'IntegratedInfo.xlsx','Sheet',2,'WriteMode','append');
-        writematrix(LinkageInfo1,'IntegratedInfo.xlsx','Sheet',3,'WriteMode','append');
-        writematrix(LinkageInfo2,'IntegratedInfo.xlsx','Sheet',4,'WriteMode','append');
+        writecell(InfoExcel,'IntegratedInfo.xlsx','Sheet',1);
+        writecell(FragmentInfo,'IntegratedInfo.xlsx','Sheet',2,'WriteMode','append');
+        writecell(LinkageInfo1,'IntegratedInfo.xlsx','Sheet',3,'WriteMode','append');
+        writecell(LinkageInfo2,'IntegratedInfo.xlsx','Sheet',4,'WriteMode','append');
         curDir = pwd;
         filaname = fullfile(curDir,'IntegratedInfo.xlsx');
         e = actxserver('Excel.Application');
