@@ -892,7 +892,7 @@ switch A
         figure(2);
         histogram(B, 'Normalization','probability');xlim([0 inf]);
         filename='BSC1.xls';
-        writematrix(B,filename,'Sheet','sheet1');
+        writematrix(B,filename,'Sheet','Sheet1');
 
         figure(3);
 
