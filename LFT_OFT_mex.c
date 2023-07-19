@@ -8,8 +8,15 @@
 // Sandberg, K. & Brega, M. Segmentation of thin structures in electron micrographs using orientation fields. J Struct Biol 157, 403-415 (2007). 
 #include "mex.h"
 #include <math.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 # define PI 3.141593
+
+#define printfFcn(...) { mexPrintf(__VA_ARGS__); mexEvalString("pause(.001);"); } 
+extern bool ioFlush(void);
+
+/* { mexPrintf(__VA_ARGS__); mexEvalString("drawnow;('update')"); } */
 
 void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orientations, int H, int W, int R, double Nangles, double *ROIMask)
 {
@@ -24,7 +31,8 @@ void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orienta
     imgHeight = H - R;
     imgWidth  = W - R;
     // LFT
-    mexPrintf("Computing the LFT...\n");
+    printfFcn("Computing the LFT...\n");
+
     for(i=R; i<imgWidth; i++)
     {
         for(j=(int)R; j<imgHeight; j++)
@@ -56,9 +64,16 @@ void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orienta
                 LFT_Orientations[i*H + j] = MaxIntensityAngle;
             }
         }
+        printfFcn("%d",i % 10);
+        if ((i%100) == 0) {
+            printfFcn("\n");
+        }
+    }
+    if ((i%100) > 0) {
+        printfFcn("\n"); 
     }
     // OFT
-    mexPrintf("Computing the OFT...\n");
+    printfFcn("Computing the OFT...\n");
     for(i=R; i<imgWidth; i++)
     {
         for(j=R; j<imgHeight; j++)
@@ -86,9 +101,16 @@ void Enhancement(double *Img, double *EImg, double *LFT_Img, double *LFT_Orienta
                 EImg[i*H + j] = MaxAngleIntensity;
             }
         }
+        printfFcn("%d",i % 10);
+        if ((i%100) == 0) {
+            printfFcn("\n");
+        }
+    }
+    if ((i%100) > 0) { printfFcn("\n"); 
     }
 }
-    
+
+
 void Initialization(double *Img, double *EImg, double *LFT_Img, double *LFT_Orientations, int H, int W, double R, double Nangles, double *ROIMask)
 {
     double dim[2];
